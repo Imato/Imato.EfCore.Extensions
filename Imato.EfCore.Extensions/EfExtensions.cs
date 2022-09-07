@@ -77,8 +77,8 @@ namespace Imato.EfCore.Extensions
         public static async Task BulkInsertAsync<T>(this DbContext context,
             IEnumerable<T> records,
             string? tableName = null,
-            int batchSize = 10000,
-            int timeout = 30000,
+            int batchSize = 1000,
+            int timeout = 3000,
             CancellationToken cancellationToken = default)
         {
             using (var bulkCopy = CreateBulkCopy<T>(context, tableName, batchSize, timeout))

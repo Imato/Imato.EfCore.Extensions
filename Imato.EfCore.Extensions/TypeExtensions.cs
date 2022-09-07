@@ -4,11 +4,11 @@ namespace Imato.EfCore.Extensions
 {
     public static class TypeExtensions
     {
-        public static string SqlDateFormat = "yyyy-MM-dd HH:mm:ss.ffff";
+        public static string SqlDateFormat = "yyyy-MM-dd HH:mm:ss.fff";
 
         private static JsonSerializerOptions jOptions = new JsonSerializerOptions
         {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
         };
 
         public static string ToSqlString(this string str)
@@ -45,7 +45,7 @@ namespace Imato.EfCore.Extensions
 
             if (field.GetType().IsValueType)
             {
-                return field.ToString();
+                return JsonSerializer.Serialize(field, jOptions);
             }
 
             return $"'{JsonSerializer.Serialize(field, jOptions)}'";

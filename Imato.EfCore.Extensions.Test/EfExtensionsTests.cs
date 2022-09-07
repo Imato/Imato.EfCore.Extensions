@@ -9,7 +9,7 @@ namespace Imato.EfCore.Extensions.Test
 {
     public class EfExtensionsTests
     {
-        private Customer[] customers = new Customer[2]
+        private Customer[] customers = new Customer[3]
         {
             new Customer
             {
@@ -27,6 +27,15 @@ namespace Imato.EfCore.Extensions.Test
                 Created = DateTime.Parse("2022-01-04 00:12:00"),
                 IsActive = false,
                 Description = "Same test"
+            },
+             new Customer
+            {
+                Id = 3,
+                Name = "Test 3",
+                Created = DateTime.Parse("2022-01-04 00:12:00"),
+                IsActive = false,
+                Closed = DateTime.Parse("2022-06-10 00:00:00"),
+                Contacts = 11
             }
         };
 
@@ -43,22 +52,22 @@ namespace Imato.EfCore.Extensions.Test
         public void GetColumnsOfTest()
         {
             var result = string.Join(",", context.GetMappingsOf<Customer>().Select(x => x.ColumnName));
-            Assert.AreEqual("Id,Amount,Created,Description,active,Name", result);
+            Assert.AreEqual("Id,Amount,Closed,Contacts,Created,Description,active,Name", result);
         }
 
         [Test]
         public void GenerateInsertTest()
         {
             var result = context.GenerateInsert(customers.First());
-            Assert.AreEqual("insert into Customers (Id,Amount,Created,Description,active,Name) values (1,1210,34,'2022-01-02 12:34:00.0000',null,1,'Test 1')",
+            Assert.AreEqual("insert into Customers (Id,Amount,Closed,Contacts,Created,Description,active,Name) values (1,1210.34,null,null,'2022-01-02 12:34:00.000',null,1,'Test 1')",
                 result);
         }
 
         [Test]
         public void GenerateInsertsTest()
         {
-            var result = context.GenerateInserts(customers);
-            Assert.AreEqual("insert into Customers (Id,Amount,Created,Description,active,Name) values (1,1210,34,'2022-01-02 12:34:00.0000',null,1,'Test 1'),(2,0,323,'2022-01-04 00:12:00.0000','Same test',0,'Test 2')",
+            var result = context.GenerateInserts(customers.Take(2));
+            Assert.AreEqual("insert into Customers (Id,Amount,Closed,Contacts,Created,Description,active,Name) values (1,1210.34,null,null,'2022-01-02 12:34:00.000',null,1,'Test 1'),(2,0.323,null,null,'2022-01-04 00:12:00.000','Same test',0,'Test 2')",
                 result);
         }
 
@@ -66,7 +75,7 @@ namespace Imato.EfCore.Extensions.Test
         public void CreateBulkCopyTest()
         {
             var resutl = context.CreateBulkCopy<Customer>();
-            Assert.AreEqual("active", resutl.ColumnMappings[4].DestinationColumn);
+            Assert.AreEqual("active", resutl.ColumnMappings[6].DestinationColumn);
         }
     }
 }

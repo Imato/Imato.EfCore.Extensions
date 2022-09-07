@@ -14,5 +14,8 @@ namespace Imato.EfCore.Extensions.Test
 
         [Column("active")]
         public bool IsActive { get; set; }
+
+        public DateTime? Closed { get; set; }
+        public int? Contacts { get; set; }
     }
 }
