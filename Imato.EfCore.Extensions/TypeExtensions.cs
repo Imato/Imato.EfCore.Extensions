@@ -13,7 +13,7 @@ namespace Imato.EfCore.Extensions
 
         public static string ToSqlString(this string str)
         {
-            return $"'{str}'";
+            return $"'{str.Replace("'", "''")}'";
         }
 
         public static string ToSqlString(this DateTime date)
@@ -48,7 +48,7 @@ namespace Imato.EfCore.Extensions
                 return JsonSerializer.Serialize(field, jOptions);
             }
 
-            return $"'{JsonSerializer.Serialize(field, jOptions)}'";
+            return $"'{JsonSerializer.Serialize(field, jOptions).ToSqlString()}'";
         }
     }
 }
