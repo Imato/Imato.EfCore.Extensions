@@ -59,7 +59,7 @@ namespace Imato.EfCore.Extensions.Test
         public void GenerateInsertTest()
         {
             var result = context.GenerateInsert(customers.First());
-            Assert.AreEqual("insert into Customers (Id,Amount,Closed,Contacts,Created,Description,active,Name) values (1,1210.34,null,null,'2022-01-02 12:34:00.000',null,1,'Test 1')",
+            Assert.AreEqual("insert into Customers ([Id],[Amount],[Closed],[Contacts],[Created],[Description],[active],[Name]) values (1,1210.34,null,null,'2022-01-02 12:34:00.000',null,1,'Test 1')",
                 result);
         }
 
@@ -67,7 +67,7 @@ namespace Imato.EfCore.Extensions.Test
         public void GenerateInsertsTest()
         {
             var result = context.GenerateInserts(customers.Take(2));
-            Assert.AreEqual("insert into Customers (Id,Amount,Closed,Contacts,Created,Description,active,Name) values (1,1210.34,null,null,'2022-01-02 12:34:00.000',null,1,'Test 1'),(2,0.323,null,null,'2022-01-04 00:12:00.000','Same test',0,'Test 2')",
+            Assert.AreEqual("insert into Customers ([Id],[Amount],[Closed],[Contacts],[Created],[Description],[active],[Name]) values (1,1210.34,null,null,'2022-01-02 12:34:00.000',null,1,'Test 1'),(2,0.323,null,null,'2022-01-04 00:12:00.000','Same test',0,'Test 2')",
                 result);
         }
 

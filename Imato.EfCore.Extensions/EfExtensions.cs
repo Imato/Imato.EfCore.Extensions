@@ -88,7 +88,7 @@ namespace Imato.EfCore.Extensions
 
         private static string GenerateInsert<T>(this DbContext context, string tableName)
         {
-            return $"insert into {tableName} ({string.Join(',', context.GetMappingsOf<T>().Select(x => x.ColumnName))}) values ";
+            return $"insert into {tableName} ([{string.Join("],[", context.GetMappingsOf<T>().Select(x => x.ColumnName))}]) values ";
         }
 
         private static string GetInsert<T>(this DbContext context, string tableName)
