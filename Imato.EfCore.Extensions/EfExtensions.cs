@@ -13,8 +13,8 @@ namespace Imato.EfCore.Extensions
 
         private static (string From, string To)[] _replacements =
         {
-            ("}", "["),
-            ("{", "]"),
+            ("}", "]"),
+            ("{", "["),
         };
 
         public static string GetTableOf<T>(this DbContext context)
