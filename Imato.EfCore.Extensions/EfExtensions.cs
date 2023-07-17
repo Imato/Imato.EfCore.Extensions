@@ -11,6 +11,12 @@ namespace Imato.EfCore.Extensions
         private static ConcurrentDictionary<string, string> _inserts = new ConcurrentDictionary<string, string>();
         private static ConcurrentDictionary<string, IEnumerable<FieldMapping>> _mappings = new ConcurrentDictionary<string, IEnumerable<FieldMapping>>();
 
+        private static (string From, string To)[] _replacements =
+        {
+            ("}", "["),
+            ("{", "]"),
+        };
+
         public static string GetTableOf<T>(this DbContext context)
         {
             var entityType = context.Model.FindEntityType(typeof(T));
@@ -119,12 +125,29 @@ namespace Imato.EfCore.Extensions
             return builder.ToString();
         }
 
+        private static string FixSql(string sql)
+        {
+            if (sql.StartsWith("delete", StringComparison.OrdinalIgnoreCase)
+                || sql.StartsWith("drop", StringComparison.OrdinalIgnoreCase))
+            {
+                throw new ApplicationException($"Wrong SQL: {sql}");
+            }
+            foreach (var r in _replacements)
+            {
+                sql = sql.Replace(r.From, r.To);
+            }
+
+            return sql;
+        }
+
         public static async Task InsertAsync<T>(this DbContext context,
             T record, string?
             tableName = null,
             CancellationToken cancellationToken = default)
         {
-            await context.Database.ExecuteSqlRawAsync(GenerateInsert(context, record, tableName), cancellationToken);
+            var sql = GenerateInsert(context, record, tableName);
+            sql = FixSql(sql);
+            await context.Database.ExecuteSqlRawAsync(sql, cancellationToken);
         }
 
         public static string GenerateInserts<T>(this DbContext context,
@@ -160,7 +183,9 @@ namespace Imato.EfCore.Extensions
                 return;
             }
 
-            await context.Database.ExecuteSqlRawAsync(GenerateInserts(context, records, tableName), cancellationToken);
+            var sql = GenerateInsert(context, records, tableName);
+            sql = FixSql(sql);
+            await context.Database.ExecuteSqlRawAsync(sql, cancellationToken);
         }
     }
 }

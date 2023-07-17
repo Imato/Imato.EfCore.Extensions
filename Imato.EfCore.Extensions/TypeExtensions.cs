@@ -28,6 +28,10 @@ namespace Imato.EfCore.Extensions
                 return "null";
             }
 
+            if (field != null)
+            {
+            }
+
             if (field.GetType() == typeof(string))
             {
                 return field.ToString().ToSqlString();
