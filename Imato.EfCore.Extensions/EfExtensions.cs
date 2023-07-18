@@ -141,8 +141,8 @@ namespace Imato.EfCore.Extensions
         }
 
         public static async Task InsertAsync<T>(this DbContext context,
-            T record, string?
-            tableName = null,
+            T record,
+            string? tableName = null,
             CancellationToken cancellationToken = default)
         {
             var sql = GenerateInsert(context, record, tableName);
@@ -183,7 +183,7 @@ namespace Imato.EfCore.Extensions
                 return;
             }
 
-            var sql = GenerateInsert(context, records, tableName);
+            var sql = GenerateInserts(context, records, tableName);
             sql = FixSql(sql);
             await context.Database.ExecuteSqlRawAsync(sql, cancellationToken);
         }
