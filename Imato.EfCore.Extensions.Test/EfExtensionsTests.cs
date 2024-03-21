@@ -45,37 +45,37 @@ namespace Imato.EfCore.Extensions.Test
         public void GetTableOfTest()
         {
             var result = context.GetTableOf<Customer>();
-            Assert.AreEqual("Customers", result);
+            Assert.That("Customers", Is.EqualTo(result));
         }
 
         [Test]
         public void GetColumnsOfTest()
         {
             var result = string.Join(",", context.GetMappingsOf<Customer>().Select(x => x.ColumnName));
-            Assert.AreEqual("Id,Amount,Closed,Contacts,Created,Description,active,Name", result);
+            Assert.That("Id,Amount,Closed,Contacts,Created,Description,active,Name", Is.EqualTo(result));
         }
 
         [Test]
         public void GenerateInsertTest()
         {
             var result = context.GenerateInsert(customers.First());
-            Assert.AreEqual("insert into Customers ([Id],[Amount],[Closed],[Contacts],[Created],[Description],[active],[Name]) values (1,1210.34,null,null,'2022-01-02 12:34:00.000',null,1,'Test 1')",
-                result);
+            Assert.That("insert into Customers ([Id],[Amount],[Closed],[Contacts],[Created],[Description],[active],[Name]) values (1,1210.34,null,null,'2022-01-02 12:34:00.000',null,1,'Test 1')",
+                Is.EqualTo(result));
         }
 
         [Test]
         public void GenerateInsertsTest()
         {
             var result = context.GenerateInserts(customers.Take(2));
-            Assert.AreEqual("insert into Customers ([Id],[Amount],[Closed],[Contacts],[Created],[Description],[active],[Name]) values (1,1210.34,null,null,'2022-01-02 12:34:00.000',null,1,'Test 1'),(2,0.323,null,null,'2022-01-04 00:12:00.000','Same test',0,'Test 2')",
-                result);
+            Assert.That("insert into Customers ([Id],[Amount],[Closed],[Contacts],[Created],[Description],[active],[Name]) values (1,1210.34,null,null,'2022-01-02 12:34:00.000',null,1,'Test 1'),(2,0.323,null,null,'2022-01-04 00:12:00.000','Same test',0,'Test 2')",
+                Is.EqualTo(result));
         }
 
         [Test]
         public void CreateBulkCopyTest()
         {
             var resutl = context.CreateBulkCopy<Customer>();
-            Assert.AreEqual("active", resutl.ColumnMappings[6].DestinationColumn);
+            Assert.That("active", Is.EqualTo(resutl.ColumnMappings[6].DestinationColumn));
         }
     }
 }
